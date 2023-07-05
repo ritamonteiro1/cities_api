@@ -1,0 +1,1 @@
+[Curso API REST node.js with typescript](https://www.youtube.com/watch?v=SVepTuBK4V0&list=PL29TaWXah3iaaXDFPgTHiFMBF6wQahurP&index=1)
