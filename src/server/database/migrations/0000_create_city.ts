@@ -10,7 +10,7 @@ export async function up(knex: Knex) {
             table.bigIncrements('id').primary().index();
             table.string('name', 150).checkLength('<=', 150).index().notNullable();
 
-            table.comment('Tabela usada para armazenar cidades do sistema');
+            table.comment('Table of cities');
         })
         .then(() => {
             console.log(`# Created table ${ETableNames.city}`);
