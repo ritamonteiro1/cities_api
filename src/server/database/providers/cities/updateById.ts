@@ -10,10 +10,9 @@ export const updateById = async (id: number, cidade: Omit<ICity, 'id'>): Promise
             .where('id', '=', id);
 
         if (result > 0) return;
-
-        return new Error('Error updating records');
+        return new Error('Error updating city');
     } catch (error) {
         console.log(error);
-        return new Error('Error updating records');
+        return new Error('Error updating city');
     }
 };

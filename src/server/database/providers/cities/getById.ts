@@ -11,10 +11,9 @@ export const getById = async (id: number): Promise<ICity | Error> => {
             .first();
 
         if (result) return result;
-
-        return new Error('Register not found');
+        return new Error('City not found');
     } catch (error) {
         console.log(error);
-        return new Error('Error querying records');
+        return new Error('Error querying city by id');
     }
 };

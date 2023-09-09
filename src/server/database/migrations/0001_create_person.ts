@@ -7,10 +7,18 @@ export async function up(knex: Knex) {
     return knex
         .schema
         .createTable(ETableNames.person, table => {
-            table.bigIncrements('id').primary().index();
-            table.string('fullName').index().notNullable();
-            table.string('email').unique().notNullable();
-
+            table
+                .bigIncrements('id')
+                .primary()
+                .index();
+            table
+                .string('fullName')
+                .index()
+                .notNullable();
+            table
+                .string('email')
+                .unique()
+                .notNullable();
             table
                 .bigInteger('cityId')
                 .index()
@@ -24,7 +32,7 @@ export async function up(knex: Knex) {
             table.comment('Table of people');
         })
         .then(() => {
-            console.log(`# Created table ${ETableNames.person}`);
+            console.log(`-> Created table ${ETableNames.person}`);
         });
 }
 
@@ -33,6 +41,6 @@ export async function down(knex: Knex) {
         .schema
         .dropTable(ETableNames.person)
         .then(() => {
-            console.log(`# Dropped table ${ETableNames.person}`);
+            console.log(`-> Dropped table ${ETableNames.person}`);
         });
 }

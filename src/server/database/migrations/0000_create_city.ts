@@ -7,13 +7,20 @@ export async function up(knex: Knex) {
     return knex
         .schema
         .createTable(ETableNames.city, table => {
-            table.bigIncrements('id').primary().index();
-            table.string('name', 150).checkLength('<=', 150).index().notNullable();
+            table
+                .bigIncrements('id')
+                .primary()
+                .index();
+            table
+                .string('name', 150)
+                .checkLength('<=', 150)
+                .index()
+                .notNullable();
 
             table.comment('Table of cities');
         })
         .then(() => {
-            console.log(`# Created table ${ETableNames.city}`);
+            console.log(`-> Created table ${ETableNames.city}`);
         });
 }
 
@@ -22,6 +29,6 @@ export async function down(knex: Knex) {
         .schema
         .dropTable(ETableNames.city)
         .then(() => {
-            console.log(`# Dropped table ${ETableNames.city}`);
+            console.log(`-> Dropped table ${ETableNames.city}`);
         });
 }
