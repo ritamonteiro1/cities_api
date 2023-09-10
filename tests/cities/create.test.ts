@@ -4,25 +4,39 @@ import { testServer } from '../jest.setup';
 
 describe('Cities - create', () => {
 
+    let accessToken = '';
+    beforeAll(async () => {
+        await testServer.post('/signUp').send({ name: 'test', email: 'exemploteste@gmail.com', password: '123456789' });
+        const signInResponse = await testServer.post('/signIn').send({ email: 'exemploteste@gmail.com', password: '123456789' });
+
+        accessToken = signInResponse.body.accessToken;
+    });
+    it('Try to create a login without access token', async () => {
+        const response = await testServer
+            .post('/cities')
+            .send({ name: 'Cidade exemplo' });
+
+        expect(response.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
+        expect(response.body).toHaveProperty('errors.default');
+    });
     it('create register', async () => {
 
-        const res1 = await testServer
+        const response = await testServer
             .post('/cities')
-            .send({ name: 'Caxias do Sul' });
+            .set({ Authorization: `Bearer ${accessToken}` })
+            .send({ name: 'City example' });
 
-
-        expect(res1.statusCode).toEqual(StatusCodes.CREATED);
-        expect(typeof res1.body).toEqual('number');
+        expect(response.statusCode).toEqual(StatusCodes.CREATED);
+        expect(typeof response.body).toEqual('number');
     });
 
     it('Try to create a register with a short name', async () => {
-
-        const res1 = await testServer
+        const response = await testServer
             .post('/cities')
-            .send({ name: 'Ca' });
+            .set({ Authorization: `Bearer ${accessToken}` })
+            .send({ name: 'Ex' });
 
-
-        expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST);
-        expect(res1.body).toHaveProperty('errors.body.name');
+        expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+        expect(response.body).toHaveProperty('errors.body.name');
     });
 });

@@ -3,17 +3,26 @@ import { testServer } from '../jest.setup';
 
 
 describe('Cities - getById', () => {
+    let accessToken = '';
+    beforeAll(async () => {
+        await testServer.post('/signUp').send({ name: 'test', email: 'exemploteste@gmail.com', password: '123456789' });
+        const signInResponse = await testServer.post('/signIn').send({ email: 'exemploteste@gmail.com', password: '123456789' });
+
+        accessToken = signInResponse.body.accessToken;
+    });
 
     it('Search register by id', async () => {
 
         const res1 = await testServer
             .post('/cities')
-            .send({ name: 'Caxias do sul' });
+            .set({ Authorization: `Bearer ${accessToken}` })
+            .send({ name: 'Cidade' });
 
         expect(res1.statusCode).toEqual(StatusCodes.CREATED);
 
         const resSearched = await testServer
             .get(`/cities/${res1.body}`)
+            .set({ Authorization: `Bearer ${accessToken}` })
             .send();
 
         expect(resSearched.statusCode).toEqual(StatusCodes.OK);
@@ -22,11 +31,12 @@ describe('Cities - getById', () => {
     
     it('Try search register do not exist', async () => {
 
-        const res1 = await testServer
+        const response = await testServer
             .get('/cities/99999')
+            .set({ Authorization: `Bearer ${accessToken}` })
             .send();
 
-        expect(res1.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
-        expect(res1.body).toHaveProperty('errors.default');
+        expect(response.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+        expect(response.body).toHaveProperty('errors.default');
     });
 });
